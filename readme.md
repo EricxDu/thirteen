@@ -44,9 +44,9 @@ a table with named fields.
 + XIII:OBJCTRL(x, k)
   - change the tile at position x to refer to tilesheet k
   - there are 13 valid positions; all other positions are invalid
-+ XIII:DRAWOBJ0
++ XIII.DRAWOBJ0
   - object layer 0 (background); draw all the objects in this table first
-+ XIII:DRAWOBJ1
++ XIII.DRAWOBJ1
   - object layer 1 (tiles); draw all the objects in this table second
 + Objects
   - each object is a table with up to four elements in this order
