@@ -28,29 +28,29 @@ particular values to the function, while `a, b, c` means you must
 provide those values to the function, in order. "args" refers to a
 a table with named fields.
 
-XIII:GFXLOAD({Drawables})
-  send Drawables by calling this function with a table of Drawables
-  used for background images to draw on object layer 0
-  used for tilesheets to draw tiles on object layer 1
-  function overwrites any Drawable with the same key as a previous Drawable
-XIII:GFXCTRL({args})
-  function accepts the following arguments
-  bg: key to set object layer 0 from the table of Drawables
-XIII:OBJLOAD({values})
-  send tile data by calling this function with a table of values
-  each value is a key that refers to the table of Drawables
-  function adds an object to DRAWOBJ1 for each valid value
-  function supports 13 consecutive values; extra values are invalid
-XIII:OBJCTRL(x, k)
-  change the tile at position x to refer to tilesheet k
-  there are 13 valid positions; all other positions are invalid
-XIII:DRAWOBJ0
-  object layer 0 (background); draw all the objects in this table first
-XIII:DRAWOBJ1
-  object layer 1 (tiles); draw all the objects in this table second
-Objects
-  each object is a table with up to four elements in this order
-  [1] = Drawable (from the table of Drawables)
-  [2] = Quad (userdata)
-  [3] = x position (number)
-  [4] = y position (number)
++ XIII:GFXLOAD({Drawables})
+  - send Drawables by calling this function with a table of Drawables
+  - used for background images to draw on object layer 0
+  - used for tilesheets to draw tiles on object layer 1
+  - function overwrites any Drawable with the same key as a previous Drawable
++ XIII:GFXCTRL({args})
+  - function accepts the following arguments
+  - bg: key to set object layer 0 from the table of Drawables
++ XIII:OBJLOAD({values})
+  - send tile data by calling this function with a table of values
+  - each value is a key that refers to the table of Drawables
+  - function adds an object to DRAWOBJ1 for each valid value
+  - function supports 13 consecutive values; extra values are invalid
++ XIII:OBJCTRL(x, k)
+  - change the tile at position x to refer to tilesheet k
+  - there are 13 valid positions; all other positions are invalid
++ XIII:DRAWOBJ0
+  - object layer 0 (background); draw all the objects in this table first
++ XIII:DRAWOBJ1
+  - object layer 1 (tiles); draw all the objects in this table second
++ Objects
+  - each object is a table with up to four elements in this order
+  - 1 = Drawable (from the table of Drawables)
+  - 2 = Quad (userdata)
+  - 3 = x position (number)
+  - 4 = y position (number)
