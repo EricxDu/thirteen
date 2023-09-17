@@ -1,7 +1,7 @@
---[[
-  Tile is a function with image data that can be rendered at any one
-  of thirteen positions within the view.
---]]
+--[[ SPDX-License-Identifier: CC0-1.0 --]]
+
+--[[ Tile is a function with image data that can be rendered at any one 
+of thirteen positions within the view. --]]
 
 local function tilefun(texture, w, h, position)
   local quad = love.graphics.newQuad(0, 0, w, h, w*8, h*2)

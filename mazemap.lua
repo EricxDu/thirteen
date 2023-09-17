@@ -1,3 +1,5 @@
+--[[ SPDX-License-Identifier: CC0-1.0 --]]
+
 local function facing_north(map, up, origin, position, default)
   if type(map) ~= 'table' or type(up) ~= 'number' then return end
   if type(origin) ~= 'number' or type(position) ~= 'number' then return end

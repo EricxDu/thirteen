@@ -1,3 +1,8 @@
+--[[ SPDX-License-Identifier: CC0-1.0 --]]
+
+--[[ This demo utilizes the functional libraries provided to render a 
+simple navigable map. It is compatible with LÖVE and Lutro. --]]
+
 mazemap = require'mazemap'
 Tile = require'tile'
 
