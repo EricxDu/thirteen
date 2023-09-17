@@ -1,78 +1,61 @@
---[[
-Copyright 2022 Eric Duhamel
+mazemap = require'mazemap'
+Tile = require'tile'
 
-    This file is part of Thirteen.
+dungeon_ceiling = Tile(love.graphics.newImage("tiles/dungeon_ceiling.png"), 80, 120)
+dungeon_door = Tile(love.graphics.newImage("tiles/dungeon_door.png"), 80, 120)
+dungeon_floor = Tile(love.graphics.newImage("tiles/dungeon_floor.png"), 80, 120)
+dungeon_wall = Tile(love.graphics.newImage("tiles/dungeon_wall.png"), 80, 120)
+grass = Tile(love.graphics.newImage("tiles/grass.png"), 80, 120)
+pillar_exterior = Tile(love.graphics.newImage("tiles/pillar_exterior.png"), 80, 120)
+template_floor = Tile(love.graphics.newImage("tiles/template_floor.png"), 80, 120)
 
-    Thirteen is free software: you can redistribute it and/or modify it
-    under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    Thirteen is distributed in the hope that it will be useful, but
-    WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-    General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with Thirteen. If not, see <https://www.gnu.org/licenses/>.
---]]
-require'xiii'
-
-love.graphics.setDefaultFilter('nearest', 'nearest')
-
-XIII:GFXLOAD{
-  [1] = love.graphics.newImage("tiles/dungeon_floor.png"),
-  [2] = love.graphics.newImage("tiles/dungeon_wall.png"),
-  [3] = love.graphics.newImage("tiles/dungeon_door.png"),
-  [4] = love.graphics.newImage("tiles/pillar_exterior.png"),
-  [5] = love.graphics.newImage("tiles/dungeon_ceiling.png"),
-  [6] = love.graphics.newImage("tiles/grass.png"),
-  [7] = love.graphics.newImage("tiles/pillar_interior.png"),
-  [8] = love.graphics.newImage("tiles/chest_interior.png"),
-  [9] = love.graphics.newImage("tiles/chest_exterior.png"),
- [10] = love.graphics.newImage("tiles/medieval_house.png"),
- [11] = love.graphics.newImage("tiles/medieval_door.png"),
- [12] = love.graphics.newImage("tiles/tree_evergreen.png"),
- [13] = love.graphics.newImage("tiles/grave_cross.png"),
- [14] = love.graphics.newImage("tiles/grave_stone.png"),
- [15] = love.graphics.newImage("tiles/water.png"),
- [16] = love.graphics.newImage("tiles/skull_pile.png"),
- [17] = love.graphics.newImage("tiles/hay_pile.png"),
- [18] = love.graphics.newImage("tiles/locked_door.png"),
- [19] = love.graphics.newImage("tiles/death_speaker.png"),
- ["nightsky"] = love.graphics.newImage("tiles/nightsky.png"),
- ["tempest"] = love.graphics.newImage("tiles/tempest.png")
+this_tileset = {
+  dungeon_floor,
+  dungeon_wall,
+  dungeon_door,
+  pillar_exterior,
+  dungeon_ceiling,
+  grass
 }
 
-XIII:GFXCTRL( {bg = "tempest"} )
-
-MAP = {1, 2, 3, 9, 2,
-       1, 2, 1, 1, 1,
-          1, 1, 4
+global_map0 = {
+  0,0,2,2,3,2,2,0,0,
+  0,0,2,4,1,4,2,0,0,
+  2,2,2,1,1,1,2,2,2,
+  2,6,6,4,1,4,6,6,2,
+  2,6,6,1,1,1,6,6,2,
+  2,2,6,4,1,4,6,2,2,
+  2,3,1,1,1,1,1,3,2,
+  2,2,6,4,1,4,6,2,2,
+  2,6,6,1,1,1,6,6,2,
+  2,6,6,4,1,4,6,6,2,
+  2,2,2,2,3,2,2,2,2
 }
 
-TILES = {}
+LOCATE = 14
+WIDTH = 9
+
+for k, v in ipairs(global_map0) do
+  global_map0[k] = this_tileset[v]
+end
+
+global_tiles0 = {}
 
 function love.load()
-  for i, v in pairs(MAP) do
-    TILES[i] = v
+  for x=1,13,1 do
+  table.insert(
+    global_tiles0,
+    mazemap(global_map0, WIDTH, LOCATE, x, template_floor)
+  )
   end
-  XIII:OBJLOAD(TILES)
+end
+
+function love.update(dt)
 end
 
 function love.draw()
   love.graphics.scale(5)
-  for _, obj in pairs(XIII.DRAWOBJ0) do love.graphics.draw( unpack(obj) ) end
-  for _, obj in pairs(XIII.DRAWOBJ1) do love.graphics.draw( unpack(obj) ) end
-end
-
-function love.keypressed(key)
-  local x = string.byte(key) % 16
-  if x and MAP[x] then
-    local n = clamp(MAP[x] + 1, 19)
-    MAP[x], TILES[x] = n, {n}
-    XIII:OBJCTRL(x, n)
+  for i, tile in ipairs(global_tiles0) do
+    love.graphics.draw(tile(i))
   end
 end
-
-function clamp(v, n) return v % n > 0 and v % n or n end
