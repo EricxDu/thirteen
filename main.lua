@@ -3,7 +3,7 @@
 --[[ This demo utilizes the functional libraries provided to render a 
 simple navigable map. It is compatible with LÖVE and Lutro. --]]
 
-mazemap = require'mazemap'
+Mazemap = require'mazemap'
 Tile = require'tile'
 
 dungeon_ceiling = Tile(love.graphics.newImage("tiles/dungeon_ceiling.png"), 80, 120)
@@ -46,12 +46,15 @@ end
 
 global_tiles0 = {}
 
+global_stage0 = Mazemap.north(global_map0, WIDTH, LOCATE)
+global_scene0 = global_stage0(LOCATE)
+
 function love.load()
   for x=1,13,1 do
-  table.insert(
-    global_tiles0,
-    mazemap(global_map0, WIDTH, LOCATE, x, template_floor)
-  )
+    table.insert(
+      global_tiles0,
+      global_scene0(x)
+    )
   end
 end
 
@@ -61,6 +64,8 @@ end
 function love.draw()
   love.graphics.scale(5)
   for i, tile in ipairs(global_tiles0) do
-    love.graphics.draw(tile(i))
+    if tile then 
+      love.graphics.draw(tile(i))
+    end
   end
 end

@@ -1,37 +1,70 @@
 --[[ SPDX-License-Identifier: CC0-1.0 --]]
 
-local function facing_north(map, up, origin, position, default)
-  if type(map) ~= 'table' or type(up) ~= 'number' then return end
-  if type(origin) ~= 'number' or type(position) ~= 'number' then return end
-  up = math.floor(up)
-  origin = math.floor(origin % #map)
-  local tile = map[origin - up - up - 2]  --upstage right
-  if position == 2 then
-    tile = map[origin - up - up + 2]  --upstage left
-  elseif position == 3 then
-    tile = map[origin - up - up - 1]  --upstage right center
-  elseif position == 4 then
-    tile = map[origin - up - up + 1]  --upstage left center
-  elseif position == 5 then
-    tile = map[origin - up - up]  --upstage up center
-  elseif position == 6 then
-    tile = map[origin - up - 2]  --centerstage right
-  elseif position == 7 then
-    tile = map[origin - up + 2]  --centerstage left
-  elseif position == 8 then
-    tile = map[origin - up - 1]  --centerstage right center
-  elseif position == 9 then
-    tile = map[origin - up + 1]  --centerstage left center
-  elseif position == 10 then
-    tile = map[origin - up]  --centerstage center
-  elseif position == 11 then
-    tile = map[origin - 1]  --downstage right center
-  elseif position == 12 then
-    tile = map[origin + 1]  --downstage left center
-  elseif position == 13 then
-    tile = map[origin]  --downstage down center
+local function direction(map, o, x, y)
+  return function (n)
+    if n == 1 then
+      --[[ upstage right--]]
+      return map[o + y + y + x + x]
+    elseif n == 2 then
+      --[[ upstage left--]]
+      return map[o + y + y - x - x]
+    elseif n == 3 then
+      --[[ upstage right center--]]
+      return map[o + y + y + x]
+    elseif n == 4 then
+      --[[ upstage left center--]]
+      return map[o + y + y - x]
+    elseif n == 5 then
+      --[[ upstage up center--]]
+      return map[o + y + y]
+    elseif n == 6 then
+      --[[ centerstage right--]]
+      return map[o + y + x + x]
+    elseif n == 7 then
+      --[[ centerstage left--]]
+      return map[o + y - x - x]
+    elseif n == 8 then
+      --[[ centerstage right center--]]
+      return map[o + y + x]
+    elseif n == 9 then
+      --[[ centerstage left center--]]
+      return map[o + y - x]
+    elseif n == 10 then
+      --[[ centerstage center--]]
+      return map[o + y]
+    elseif n == 11 then
+      --[[ downstage right center--]]
+      return map[o + x]
+    elseif n == 12 then
+      --[[ downstage left center--]]
+      return map[o - x]
+    elseif n == 13 then
+      --[[ downstage down center--]]
+      return map[o]
+    end
   end
-  return tile and tile or default
 end
 
-return facing_north
+local function funposition(fun)
+end
+
+local function north(map, up)
+  if type(map) ~= 'table' then return end
+  if type(up) ~= 'number' then return end
+  up = math.floor(up)
+  return function (origin)
+    if type(origin) ~= 'number' then return end
+    origin = math.floor(origin % #map)
+    local fun1 = direction(map, origin, -1, -up)
+    return function (position)
+      if type(position) ~= 'number' then return end
+      position = math.floor(position)
+      local tile = fun1(position)
+      return tile and tile or false
+    end
+  end
+end
+
+return {
+  north = north
+}
