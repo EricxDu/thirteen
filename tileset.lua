@@ -1,9 +1,13 @@
 --[[ SPDX-License-Identifier: CC0-1.0 --]]
 
---[[ Tile is a function with image data that can be rendered at any one 
-of thirteen positions within the view. --]]
+--[[ This file depends on LOVE or Lutro. See https://love2d.org or 
+https://lutro.libretro.com for more information. --]]
 
-local function tilefun(texture, w, h, position)
+--[[
+Tile is a function with image data that can be rendered at any one
+of thirteen positions within the view.
+--]]
+local function tile(texture, w, h, position)
   local quad = love.graphics.newQuad(0, 0, w, h, w*8, h*2)
   local x, y = 0, 0
   if position == 2 then
@@ -46,10 +50,11 @@ local function tilefun(texture, w, h, position)
   return texture, quad, x, y
 end
 
-local function tile(texture, w, h)
+return function (filename)
+  local texture = love.graphics.newImage(filename)
+  local w, h = texture:getDimensions()
+  w, h = w / 8, h / 2
   return function (position)
-    return tilefun(texture, w, h, position)
+    return tile(texture, w, h, position)
   end
 end
-
-return tile

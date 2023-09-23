@@ -4,15 +4,15 @@
 simple navigable map. It is compatible with LÖVE and Lutro. --]]
 
 Mazemap = require'mazemap'
-Tile = require'tile'
+Tileset = require'tileset'
 
-dungeon_ceiling = Tile(love.graphics.newImage("tiles/dungeon_ceiling.png"), 80, 120)
-dungeon_door = Tile(love.graphics.newImage("tiles/dungeon_door.png"), 80, 120)
-dungeon_floor = Tile(love.graphics.newImage("tiles/dungeon_floor.png"), 80, 120)
-dungeon_wall = Tile(love.graphics.newImage("tiles/dungeon_wall.png"), 80, 120)
-grass = Tile(love.graphics.newImage("tiles/grass.png"), 80, 120)
-pillar_exterior = Tile(love.graphics.newImage("tiles/pillar_exterior.png"), 80, 120)
-template_floor = Tile(love.graphics.newImage("tiles/template_floor.png"), 80, 120)
+dungeon_ceiling = Tileset("tiles/dungeon_ceiling.png")
+dungeon_door = Tileset("tiles/dungeon_door.png")
+dungeon_floor = Tileset("tiles/dungeon_floor.png")
+dungeon_wall = Tileset("tiles/dungeon_wall.png")
+grass = Tileset("tiles/grass.png")
+pillar_exterior = Tileset("tiles/pillar_exterior.png")
+template_floor = Tileset("tiles/template_floor.png")
 
 this_tileset = {
   dungeon_floor,
@@ -24,30 +24,34 @@ this_tileset = {
 }
 
 global_map0 = {
-  0,0,2,2,3,2,2,0,0,
-  0,0,2,4,1,4,2,0,0,
-  2,2,2,1,1,1,2,2,2,
-  2,6,6,4,1,4,6,6,2,
-  2,6,6,1,1,1,6,6,2,
-  2,2,6,4,1,4,6,2,2,
-  2,3,1,1,1,1,1,3,2,
-  2,2,6,4,1,4,6,2,2,
-  2,6,6,1,1,1,6,6,2,
-  2,6,6,4,1,4,6,6,2,
-  2,2,2,2,3,2,2,2,2
+  {0,0,2,2,3,2,2,0,0},
+  {0,0,2,4,1,4,2,0,0},
+  {2,2,2,1,1,1,2,2,2},
+  {2,6,6,4,1,4,6,6,2},
+  {2,6,6,1,1,1,6,6,2},
+  {2,2,6,4,1,4,6,2,2},
+  {2,3,1,1,1,1,1,3,2},
+  {2,2,6,4,1,4,6,2,2},
+  {2,6,6,1,1,1,6,6,2},
+  {2,6,6,4,1,4,6,6,2},
+  {2,2,2,2,3,2,2,2,2}
 }
 
-LOCATE = 14
-WIDTH = 9
+avatar = {
+  x = 5,
+  y = 2
+}
 
-for k, v in ipairs(global_map0) do
-  global_map0[k] = this_tileset[v]
+for y, line in ipairs(global_map0) do
+  for x, v in ipairs(line) do
+    line[x] = this_tileset[v]
+  end
 end
 
 global_tiles0 = {}
 
-global_stage0 = Mazemap.north(global_map0, WIDTH, LOCATE)
-global_scene0 = global_stage0(LOCATE)
+global_stage0 = Mazemap.west(global_map0)
+global_scene0 = global_stage0(avatar.x, avatar.y)
 
 function love.load()
   for x=1,13,1 do

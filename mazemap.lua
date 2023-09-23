@@ -1,70 +1,168 @@
 --[[ SPDX-License-Identifier: CC0-1.0 --]]
 
-local function direction(map, o, x, y)
-  return function (n)
-    if n == 1 then
-      --[[ upstage right--]]
-      return map[o + y + y + x + x]
-    elseif n == 2 then
-      --[[ upstage left--]]
-      return map[o + y + y - x - x]
-    elseif n == 3 then
-      --[[ upstage right center--]]
-      return map[o + y + y + x]
-    elseif n == 4 then
-      --[[ upstage left center--]]
-      return map[o + y + y - x]
-    elseif n == 5 then
-      --[[ upstage up center--]]
-      return map[o + y + y]
-    elseif n == 6 then
-      --[[ centerstage right--]]
-      return map[o + y + x + x]
-    elseif n == 7 then
-      --[[ centerstage left--]]
-      return map[o + y - x - x]
-    elseif n == 8 then
-      --[[ centerstage right center--]]
-      return map[o + y + x]
-    elseif n == 9 then
-      --[[ centerstage left center--]]
-      return map[o + y - x]
-    elseif n == 10 then
-      --[[ centerstage center--]]
-      return map[o + y]
-    elseif n == 11 then
-      --[[ downstage right center--]]
-      return map[o + x]
-    elseif n == 12 then
-      --[[ downstage left center--]]
-      return map[o - x]
-    elseif n == 13 then
-      --[[ downstage down center--]]
-      return map[o]
+local function mapfun(map)
+  return function (x, y)
+    local value = false
+    if map[y] then
+      if map[y][x] then
+        value = map[y][x]
+      end
+    end
+    return value
+  end
+end
+
+local function east(map)
+  local map = mapfun(map)
+  return function (x, y)
+    return function (n)
+      local tile = false
+      if n == 1 then
+        tile = map(x - 2, y - 2)        --[[ upstage right--]]
+      elseif n == 2 then
+        tile = map(x - 2, y + 2)        --[[ upstage left--]]
+      elseif n == 3 then
+        tile = map(x - 2, y - 1)        --[[ upstage right center--]]
+      elseif n == 4 then
+        tile = map(x - 2, y + 1)        --[[ upstage left center--]]
+      elseif n == 5 then
+        tile = map(x - 2, y)        --[[ upstage up center--]]
+      elseif n == 6 then
+        tile = map(x - 1, y - 2)        --[[ centerstage right--]]
+      elseif n == 7 then
+        tile = map(x - 1, y + 2)        --[[ centerstage left--]]
+      elseif n == 8 then
+        tile = map(x - 1, y - 1)        --[[ centerstage right center--]]
+      elseif n == 9 then
+        tile = map(x - 1, y + 1)        --[[ centerstage left center--]]
+      elseif n == 10 then
+        tile = map(x - 1, y)        --[[ centerstage center--]]
+      elseif n == 11 then
+        tile = map(x, y - 1)        --[[ downstage right center--]]
+      elseif n == 12 then
+        tile = map(x, y + 1)        --[[ downstage left center--]]
+      elseif n == 13 then
+        tile = map(x, y)        --[[ downstage down center--]]
+      end
+      return tile
     end
   end
 end
 
-local function funposition(fun)
+local function north(map)
+  local map = mapfun(map)
+  return function (x, y)
+    return function (n)
+      local tile = false
+      if n == 1 then
+        tile = map(x - 2, y - 2)        --[[ upstage right--]]
+      elseif n == 2 then
+        tile = map(x + 2, y - 2)        --[[ upstage left--]]
+      elseif n == 3 then
+        tile = map(x - 1, y - 2)        --[[ upstage right center--]]
+      elseif n == 4 then
+        tile = map(x + 1, y - 2)        --[[ upstage left center--]]
+      elseif n == 5 then
+        tile = map(x, y - 2)        --[[ upstage up center--]]
+      elseif n == 6 then
+        tile = map(x - 2, y - 1)        --[[ centerstage right--]]
+      elseif n == 7 then
+        tile = map(x + 2, y - 1)        --[[ centerstage left--]]
+      elseif n == 8 then
+        tile = map(x - 1, y - 1)        --[[ centerstage right center--]]
+      elseif n == 9 then
+        tile = map(x + 1, y - 1)        --[[ centerstage left center--]]
+      elseif n == 10 then
+        tile = map(x, y - 1)        --[[ centerstage center--]]
+      elseif n == 11 then
+        tile = map(x - 1, y)        --[[ downstage right center--]]
+      elseif n == 12 then
+        tile = map(x + 1, y)        --[[ downstage left center--]]
+      elseif n == 13 then
+        tile = map(x, y)        --[[ downstage down center--]]
+      end
+      return tile
+    end
+  end
 end
 
-local function north(map, up)
-  if type(map) ~= 'table' then return end
-  if type(up) ~= 'number' then return end
-  up = math.floor(up)
-  return function (origin)
-    if type(origin) ~= 'number' then return end
-    origin = math.floor(origin % #map)
-    local fun1 = direction(map, origin, -1, -up)
-    return function (position)
-      if type(position) ~= 'number' then return end
-      position = math.floor(position)
-      local tile = fun1(position)
-      return tile and tile or false
+local function south(map)
+  local map = mapfun(map)
+  return function (x, y)
+    return function (n)
+      local tile = false
+      if n == 1 then
+        tile = map(x + 2, y + 2)        --[[ upstage right--]]
+      elseif n == 2 then
+        tile = map(x - 2, y + 2)        --[[ upstage left--]]
+      elseif n == 3 then
+        tile = map(x + 1, y + 2)        --[[ upstage right center--]]
+      elseif n == 4 then
+        tile = map(x - 1, y + 2)        --[[ upstage left center--]]
+      elseif n == 5 then
+        tile = map(x, y + 2)        --[[ upstage up center--]]
+      elseif n == 6 then
+        tile = map(x + 2, y + 1)        --[[ centerstage right--]]
+      elseif n == 7 then
+        tile = map(x - 2, y + 1)        --[[ centerstage left--]]
+      elseif n == 8 then
+        tile = map(x + 1, y + 1)        --[[ centerstage right center--]]
+      elseif n == 9 then
+        tile = map(x - 1, y + 1)        --[[ centerstage left center--]]
+      elseif n == 10 then
+        tile = map(x, y + 1)        --[[ centerstage center--]]
+      elseif n == 11 then
+        tile = map(x + 1, y)        --[[ downstage right center--]]
+      elseif n == 12 then
+        tile = map(x - 1, y)        --[[ downstage left center--]]
+      elseif n == 13 then
+        tile = map(x, y)        --[[ downstage down center--]]
+      end
+      return tile
+    end
+  end
+end
+
+local function west(map)
+  local map = mapfun(map)
+  return function (x, y)
+    return function (n)
+      local tile = false
+      if n == 1 then
+        tile = map(x + 2, y + 2)        --[[ upstage right--]]
+      elseif n == 2 then
+        tile = map(x + 2, y - 2)        --[[ upstage left--]]
+      elseif n == 3 then
+        tile = map(x + 2, y + 1)        --[[ upstage right center--]]
+      elseif n == 4 then
+        tile = map(x + 2, y - 1)        --[[ upstage left center--]]
+      elseif n == 5 then
+        tile = map(x + 2, y)        --[[ upstage up center--]]
+      elseif n == 6 then
+        tile = map(x + 1, y + 2)        --[[ centerstage right--]]
+      elseif n == 7 then
+        tile = map(x + 1, y - 2)        --[[ centerstage left--]]
+      elseif n == 8 then
+        tile = map(x + 1, y + 1)        --[[ centerstage right center--]]
+      elseif n == 9 then
+        tile = map(x + 1, y - 1)        --[[ centerstage left center--]]
+      elseif n == 10 then
+        tile = map(x + 1, y)        --[[ centerstage center--]]
+      elseif n == 11 then
+        tile = map(x, y + 1)        --[[ downstage right center--]]
+      elseif n == 12 then
+        tile = map(x, y - 1)        --[[ downstage left center--]]
+      elseif n == 13 then
+        tile = map(x, y)        --[[ downstage down center--]]
+      end
+      return tile
     end
   end
 end
 
 return {
-  north = north
+  east = east,
+  north = north,
+  south = south,
+  west = west
 }
