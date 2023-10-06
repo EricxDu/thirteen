@@ -3,6 +3,8 @@
 --[[ This demo utilizes the functional libraries provided to render a 
 simple navigable map. It is compatible with LÖVE and Lutro. --]]
 
+Atlas = require'atlas'
+Avatar = require'avatar'
 Mazemap = require'mazemap'
 Tileset = require'tileset'
 
@@ -23,24 +25,18 @@ this_tileset = {
   grass
 }
 
-global_map0 = {
-  {0,0,2,2,3,2,2,0,0},
-  {0,0,2,4,1,4,2,0,0},
-  {2,2,2,1,1,1,2,2,2},
-  {2,6,6,4,1,4,6,6,2},
-  {2,6,6,1,1,1,6,6,2},
-  {2,2,6,4,1,4,6,2,2},
-  {2,3,1,1,1,1,1,3,2},
-  {2,2,6,4,1,4,6,2,2},
-  {2,6,6,1,1,1,6,6,2},
-  {2,6,6,4,1,4,6,6,2},
-  {2,2,2,2,3,2,2,2,2}
+this_walkable = {
+  true,
+  false,
+  true,
+  false,
+  true,
+  true
 }
 
-avatar = {
-  x = 5,
-  y = 2
-}
+global_map0 = Atlas.maps[1]
+
+avatar = Avatar:new{x = 6, y = 3}
 
 for y, line in ipairs(global_map0) do
   for x, v in ipairs(line) do
@@ -50,7 +46,7 @@ end
 
 global_tiles0 = {}
 
-global_stage0 = Mazemap.west(global_map0)
+global_stage0 = Mazemap[avatar.facing](global_map0)
 global_scene0 = global_stage0(avatar.x, avatar.y)
 
 function love.load()
@@ -72,4 +68,29 @@ function love.draw()
       love.graphics.draw(tile(i))
     end
   end
+end
+
+function love.joystickpressed(n, b)
+  local x, y = avatar.x, avatar.y
+  if b == 4 then
+    x, y = avatar:forward()
+    avatar.x, avatar.y = x, y
+  elseif b == 5 then
+    avatar.x, avatar.y = avatar:backward()
+  elseif b == 6 then
+    avatar:turnleft()
+  elseif b == 7 then
+    avatar:turnright()
+  end
+  global_stage0 = Mazemap[avatar.facing](global_map0)
+  global_scene0 = global_stage0(avatar.x, avatar.y)
+  global_tiles0 = set_tiles(global_scene0)
+end
+
+function set_tiles(scene)
+  local tiles = {}
+  for x = 1, 13, 1 do
+    tiles[x] = scene(x)
+  end
+  return tiles
 end
