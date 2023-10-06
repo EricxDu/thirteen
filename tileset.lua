@@ -50,7 +50,9 @@ local function tile(texture, w, h, position)
   return texture, quad, x, y
 end
 
-return function (filename)
+local tileset = {}
+
+function tileset.tile(filename)
   local texture = love.graphics.newImage(filename)
   local w, h = texture:getDimensions()
   w, h = w / 8, h / 2
@@ -58,3 +60,5 @@ return function (filename)
     return tile(texture, w, h, position)
   end
 end
+
+return tileset

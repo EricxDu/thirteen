@@ -8,13 +8,13 @@ Avatar = require'avatar'
 Mazemap = require'mazemap'
 Tileset = require'tileset'
 
-dungeon_ceiling = Tileset("tiles/dungeon_ceiling.png")
-dungeon_door = Tileset("tiles/dungeon_door.png")
-dungeon_floor = Tileset("tiles/dungeon_floor.png")
-dungeon_wall = Tileset("tiles/dungeon_wall.png")
-grass = Tileset("tiles/grass.png")
-pillar_exterior = Tileset("tiles/pillar_exterior.png")
-template_floor = Tileset("tiles/template_floor.png")
+dungeon_ceiling = Tileset.tile("tiles/dungeon_ceiling.png")
+dungeon_door = Tileset.tile("tiles/dungeon_door.png")
+dungeon_floor = Tileset.tile("tiles/dungeon_floor.png")
+dungeon_wall = Tileset.tile("tiles/dungeon_wall.png")
+grass = Tileset.tile("tiles/grass.png")
+pillar_exterior = Tileset.tile("tiles/pillar_exterior.png")
+template_floor = Tileset.tile("tiles/template_floor.png")
 
 this_tileset = {
   dungeon_floor,
@@ -26,15 +26,20 @@ this_tileset = {
 }
 
 this_walkable = {
-  true,
-  false,
-  true,
-  false,
-  true,
-  true
+  [dungeon_floor] = true,
+  [dungeon_wall] = false,
+  [dungeon_door] = true,
+  [pillar_exterior] = false,
+  [dungeon_ceiling] = true,
+  [grass] = true
 }
 
+for k, v in pairs(this_tileset) do
+  print(k, v)
+end
+
 global_map0 = Atlas.maps[1]
+global_tilemap0 = {}
 
 avatar = Avatar:new{x = 6, y = 3}
 
@@ -71,12 +76,19 @@ function love.draw()
 end
 
 function love.joystickpressed(n, b)
-  local x, y = avatar.x, avatar.y
+  local x, y, tile = avatar.x, avatar.y
   if b == 4 then
     x, y = avatar:forward()
-    avatar.x, avatar.y = x, y
+    tile = global_map0[y][x]
+    if tile and this_walkable[tile] then
+      avatar.x, avatar.y = x, y
+    end
   elseif b == 5 then
-    avatar.x, avatar.y = avatar:backward()
+    x, y = avatar:backward()
+    tile = global_map0[y][x]
+    if tile and this_walkable[tile] then
+      avatar.x, avatar.y = x, y
+    end
   elseif b == 6 then
     avatar:turnleft()
   elseif b == 7 then
