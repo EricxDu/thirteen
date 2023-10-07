@@ -83,4 +83,19 @@ function avatar:turnright()
   end
 end
 
+function avatar:walk(map, x, y)
+  if not map[y] then
+    return
+  end
+  local tile = map[y][x]
+  if tile and not self.walkable then
+    self.x, self.y = x, y
+    return
+  end
+  if tile and self.walkable[tile] then
+    self.x, self.y = x, y
+    return
+  end
+end
+
 return avatar
