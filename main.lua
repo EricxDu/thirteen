@@ -10,48 +10,45 @@ Tileset = require'tileset'
 
 avatar = Avatar:new{x = 6, y = 3}
 
-chest_exterior = Tileset.tile("tiles/chest_exterior.png")
-chest_interior = Tileset.tile("tiles/chest_interior.png")
-dungeon_ceiling = Tileset.tile("tiles/dungeon_ceiling.png")
-dungeon_door = Tileset.tile("tiles/dungeon_door.png")
-dungeon_floor = Tileset.tile("tiles/dungeon_floor.png")
-dungeon_wall = Tileset.tile("tiles/dungeon_wall.png")
-grass = Tileset.tile("tiles/grass.png")
-medieval_house = Tileset.tile("tiles/medieval_house.png")
-medieval_door = Tileset.tile("tiles/medieval_door.png")
-pillar_exterior = Tileset.tile("tiles/pillar_exterior.png")
-pillar_interior = Tileset.tile("tiles/pillar_interior.png")
-template_floor = Tileset.tile("tiles/template_floor.png")
-tree_evergreen = Tileset.tile("tiles/tree_evergreen.png")
+container_exterior = Tileset.tile("tiles/container_exterior.png")
+container_interior = Tileset.tile("tiles/container_interior.png")
+grass = Tileset.tile("share/320x240/tiles/grass.png")
+hay_pile = Tileset.tile("share/320x240/tiles/hay_pile.png")
+medieval_house = Tileset.tile("share/320x240/tiles/medieval_house.png")
+medieval_door = Tileset.tile("share/320x240/tiles/medieval_door.png")
+metallic_ceiling = Tileset.tile("tiles/metallic_ceiling.png")
+metallic_door = Tileset.tile("tiles/metallic_door.png")
+metallic_floor = Tileset.tile("tiles/metallic_floor.png")
+metallic_wall = Tileset.tile("tiles/metallic_wall.png")
+support_exterior = Tileset.tile("tiles/support_exterior.png")
+support_interior = Tileset.tile("tiles/support_interior.png")
+tree_evergreen = Tileset.tile("share/320x240/tiles/tree_evergreen.png")
+water = Tileset.tile("share/320x240/tiles/water.png")
 
 this_tileset = {
-  dungeon_floor,
-  dungeon_wall,
-  dungeon_door,
-  pillar_exterior,
-  dungeon_ceiling,
+  metallic_floor,
+  metallic_wall,
+  metallic_door,
+  support_exterior,
+  metallic_ceiling,
   grass,
-  pillar_interior,
-  chest_interior,
-  chest_exterior,
+  support_interior,
+  container_interior,
+  container_exterior,
   medieval_house,
   medieval_door,
-  tree_evergreen
+  tree_evergreen,
+  [15] = water,
+  [17] = hay_pile
 }
 
 avatar.walkable = {
-  [dungeon_floor] = true,
-  [dungeon_wall] = false,
-  [dungeon_door] = true,
-  [pillar_exterior] = false,
-  [dungeon_ceiling] = true,
+  [container_interior] = true,
+  [container_exterior] = true,
   [grass] = true,
-  [pillar_exterior] = false,
-  [chest_interior] = true,
-  [chest_exterior] = true,
-  [medieval_house] = false,
-  [medieval_door] = true,
-  [tree_evergreen] = false
+  [metallic_ceiling] = true,
+  [metallic_door] = true,
+  [metallic_floor] = true
 }
 
 function load_map(number, x, y)
